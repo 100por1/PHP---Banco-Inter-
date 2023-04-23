@@ -41,7 +41,7 @@ function PixInter($c,$valor,$bearer){
     $valor=decimal($valor);
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://cdpj.partners.bancointer.com.br/pix/v2/cob/'.md5($c.'100p1'),
+        CURLOPT_URL => 'https://cdpj.partners.bancointer.com.br/pix/v2/cob/'.md5($c.'123456'),
         CURLOPT_SSL_VERIFYPEER=>false,
         CURLOPT_SSLKEY => $clientKey,
         CURLOPT_SSLCERT => $clientCert,
@@ -92,7 +92,7 @@ function TransferenciaPixInter($valor,$usuario,$pix,$bearer){
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_POSTFIELDS =>'{
             "valor":'.$valor.',
-            "descricao":"Saque de '.$usuario.'",
+            "descricao":"PIX solicitado de '.$usuario.'",
             "destinatario":{
                 "chave":"'.$pix.'",
                 "tipo":"CHAVE"
@@ -114,7 +114,7 @@ function TransferenciaPixInter($valor,$usuario,$pix,$bearer){
     }else{
         if(isset($inter->detail)){
             $retorno['d']=$inter->detail;
-        }else $retorno['d']='Verifique seus dados PIX, erro efetuando transferência';
+        }else $retorno['d']='Erro desconhecido, tente novamente.';
     }
     return $retorno;
 }
