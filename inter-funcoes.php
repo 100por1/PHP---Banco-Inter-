@@ -31,6 +31,37 @@ function oauthInter($scope='cob.write'){
         return false;
     }
 }
+function registra_webhook($chave_pix,$url_interna,$bearer){
+  /*
+  Escopo requerido: webhook.write
+  Rate limit: 120 chamadas por minuto
+  */
+    require("config-inter-pix.php");
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => 'https://cdpj.partners.bancointer.com.br/pix/v2/webhook/'.$chave_pix,
+    CURLOPT_SSL_VERIFYPEER=>false,
+    CURLOPT_SSLKEY => $clientKey,
+    CURLOPT_SSLCERT => $clientCert,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_CUSTOMREQUEST => 'PUT',
+    CURLOPT_POSTFIELDS =>'{
+        "webhookUrl":"'.$url_interna.'"
+    }',
+    CURLOPT_HTTPHEADER => array(
+        'x-conta-corrente: '.$conta_corrente,
+        'Content-Type: application/json',
+        'Authorization: Bearer '.$bearer
+    ),
+    ));
+
+    $resposta = curl_exec($curl);
+    curl_close($curl);
+    return $retorno;
+}
 function PixInter($c,$valor,$bearer){
   /*
   Escopo requerido: cob.write
